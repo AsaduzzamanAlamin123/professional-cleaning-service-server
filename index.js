@@ -21,13 +21,38 @@ async function run(){
     try{
         await client.connect();
         const servicesCollection = client.db("clean-co").collection("service");
+        /* 
+         get/get-services => all data
+         post/add-services => create new data 
+         put/update-services => modify a data on collection
+         delete/delete-services => delete a data from collection 
+        
+        */
 
-        app.get('/services' , async(req , res)=>{
+        app.get('/get-services' , async(req , res)=>{
             const query = {};
             const cursor = servicesCollection.find(query);
             const result = await cursor.toArray()
             res.send(result)
+        });
+
+        app.post('/add-services', async(req , res)=>{
+            const data = req.body;
+            const result = await servicesCollection.insertOne(data);
+            res.send(result);
         })
+
+        // // app.post("/add-services", async(req , res)=>{
+        // //    try{
+        // //     const data = req.body;
+        // //     const result = await servicesCollection.insertOne(data);
+        // //     res.send({status : true , result:result});
+        // //    }
+        // //    catch(error){
+        // //     res.send({status: false , error})
+        // //    }
+
+        // })
 
     }
     finally{
